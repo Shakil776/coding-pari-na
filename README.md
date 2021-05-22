@@ -2,7 +2,10 @@
 <p align="center"><h2>Ami Coding Pari Na Project Demo</h2></p>
 
 ## Github link
-	- [https://github.com/Shakil776/coding-pari-na
+	- https://github.com/Shakil776/coding-pari-na
+
+## Live Server link
+    - http://acpn.techbcd.com/
 
 ## How to use this project
 

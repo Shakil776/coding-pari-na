@@ -68,13 +68,13 @@
                               <div class="form-group">
                                 <label for="inputValues" class="col-sm-2 control-label">Input Values</label>
                                 <div class="col-sm-10">
-                                  <input type="text" name="values" class="form-control" id="inputValues" placeholder="Input Values">
+                                  <input type="text" name="values" class="form-control" id="inputValues" placeholder="Input Values" required="">
                                 </div>
                               </div>
                               <div class="form-group">
                                 <label for="searchValue" class="col-sm-2 control-label">Search Value</label>
                                 <div class="col-sm-10">
-                                  <input type="text" name="searchValue" class="form-control" id="searchValue" placeholder="Search Value">
+                                  <input type="text" name="searchValue" class="form-control" id="searchValue" placeholder="Search Value" required="">
                                 </div>
                               </div>
                               
@@ -133,6 +133,16 @@
             e.preventDefault();
             var values = $("#inputValues").val();
             var searchValue = $("#searchValue").val();
+
+            if (values == "") {
+                alert("Input Values field must be filled out");
+                return false;
+            }
+            
+            if (searchValue == "") {
+                alert("Search Value field must be filled out");
+                return false;
+            }
             
             $.ajax({
                 type: 'post',
