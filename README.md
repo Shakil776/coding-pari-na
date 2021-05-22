@@ -2,7 +2,7 @@
 <p align="center"><h2>Ami Coding Pari Na Project Demo</h2></p>
 
 ## Github link
-	- [http://127.0.0.1:8000/api/auth/login
+	- [https://github.com/Shakil776/coding-pari-na
 
 ## How to use this project
 
