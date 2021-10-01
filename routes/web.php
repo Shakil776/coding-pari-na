@@ -20,3 +20,7 @@ Route::get('/', [App\Http\Controllers\UserController::class, 'dashboard']);
 Route::post('search-value', [App\Http\Controllers\UserController::class, 'searchValue']);
 Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout']);
 
+// get all users
+Route::get('users', [App\Http\Controllers\UserController::class, 'getAllUsers'])->name('all-users');
+Route::post('delete-user', [App\Http\Controllers\UserController::class, 'deleteUser']);
+

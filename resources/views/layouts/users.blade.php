@@ -4,8 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Dashboard</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <title>Users</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ asset('style/css/dashboard.css') }}">
 </head>
@@ -66,39 +70,20 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="row" id="main" >
-                        <div class="col-sm-12 col-md-12 well" id="content">
-                            <form class="form-horizontal" method="post">
-                                @csrf
-                              <div class="form-group">
-                                <label for="inputValues" class="col-sm-2 control-label">Input Values</label>
-                                <div class="col-sm-10">
-                                  <input type="text" name="values" class="form-control" id="inputValues" placeholder="Input Values" required="">
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <label for="searchValue" class="col-sm-2 control-label">Search Value</label>
-                                <div class="col-sm-10">
-                                  <input type="text" name="searchValue" class="form-control" id="searchValue" placeholder="Search Value" required="">
-                                </div>
-                              </div>
-                              
-                              <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <input id="formSubmit" type="submit" name="btn" class="btn btn-success" value="Khoj">
-                                    <input type="reset" value="Reset" class="btn btn-primary">
-                                </div>
-                              </div>
-
-                              
-                                <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                      <span style="font-size: 20px; font-weight: bold;">Result: </span> <span style="font-size: 20px;" id="showResult"></span>
-                                    </div>
-                                </div>
-                              
-                              
-                            </form>
-                            
+                        <div class="col-sm-12 col-md-12" id="content">
+                            <table class="table table-bordered table-striped" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th width="100px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <!-- /.row -->
@@ -111,8 +96,11 @@
     </div>
 
 
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(function(){
             $('[data-toggle="tooltip"]').tooltip();
@@ -160,7 +148,43 @@
                 }
             });
         });
+
+        // delete data
+        $(document).on("click", ".delete", function(e){
+            e.preventDefault();
+            var id = $(this).attr("id");
+            
+            $.ajax({
+                type: 'post',
+                url: '/delete-user',
+                data: {id:id},
+                success: function(resp){
+                    console.log(resp);
+                    $('#data-table').DataTable().ajax.reload();
+                },
+                error: function(){
+                    console.log("Error");
+                }
+            });
+        });
     }) 
+
+        $(function () {
+    
+            var table = $('#data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('all-users') }}",
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'email', name: 'email'},
+                    {data: 'mobile', name: 'mobile'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+        
+        });
     </script>
 </body>
 </html>

@@ -8,6 +8,7 @@ use Session;
 use Hash;
 use App\Models\User;
 use App\Models\UserInput;
+use DataTables;
 
 class UserController extends Controller
 {
@@ -156,6 +157,38 @@ class UserController extends Controller
             // return data
             return response()->json([
                 'result' => $result
+            ]);
+        }
+    }
+
+    // get all users
+    public function getAllUsers(Request $request){
+        if ($request->ajax()) {
+            $data = User::select('*');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                           $btn = '<button type="button" id="'.$row->id.'" class="edit btn btn-primary btn-sm" name="edit">Edit</button>';
+                           $btn .= '&nbsp; <button type="button" id="'.$row->id.'" class="delete btn btn-danger btn-sm" name="delete">Delete</button>';
+    
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        
+        return view('layouts.users'); 
+    }
+
+    // delete user
+    public function deleteUser(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+
+            User::where('id', $data['id'])->delete();
+            return response()->json([
+                'success' => 'User Data Deleted.',
             ]);
         }
     }
